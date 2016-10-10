@@ -1,4 +1,4 @@
-package net.chiappone.util;
+package net.chiappone.util.image;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReadParam;
