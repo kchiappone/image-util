@@ -19,149 +19,147 @@ import java.util.Iterator;
  */
 public class ImageUtil {
 
-	/**
-	 * Draws an image.
-	 *
-	 * @param img
-	 * @param g
-	 * @param observer
-	 * @param x
-	 * @param y
-	 * @throws Exception
-	 */
-	public static void draw( Image img, Graphics g, ImageObserver observer, int x, int y )
-			throws Exception {
+    /**
+     * Draws an image.
+     *
+     * @param img
+     * @param g
+     * @param observer
+     * @param x
+     * @param y
+     * @throws Exception
+     */
+    public static void draw( Image img, Graphics g, ImageObserver observer, int x, int y ) throws Exception {
 
-		g.drawImage( toBufferedImage( img ), x, y, observer );
+        g.drawImage( toBufferedImage( img ), x, y, observer );
 
-	}
+    }
 
-	/**
-	 * Determines if an image has alpha transparency.
-	 *
-	 * @param image
-	 * @return
-	 * @throws InterruptedException
-	 */
-	public static boolean hasAlpha( Image image ) throws InterruptedException {
+    /**
+     * Determines if an image has alpha transparency.
+     *
+     * @param image
+     * @return
+     * @throws InterruptedException
+     */
+    public static boolean hasAlpha( Image image ) throws InterruptedException {
 
-		if ( image instanceof BufferedImage ) {
+        if ( image instanceof BufferedImage ) {
 
-			BufferedImage bi = (BufferedImage) image;
-			return bi.getColorModel().hasAlpha();
+            BufferedImage bi = (BufferedImage) image;
+            return bi.getColorModel().hasAlpha();
 
-		}
+        }
 
-		PixelGrabber pg = new PixelGrabber( image, 0, 0, 1, 1, false );
-		pg.grabPixels();
+        PixelGrabber pg = new PixelGrabber( image, 0, 0, 1, 1, false );
+        pg.grabPixels();
 
-		ColorModel cm = pg.getColorModel();
-		return cm.hasAlpha();
+        ColorModel cm = pg.getColorModel();
+        return cm.hasAlpha();
 
-	}
+    }
 
-	/**
-	 * Saves an image to disk.
-	 *
-	 * @param image
-	 * @param file
-	 * @param formatName
-	 * @throws Exception
-	 */
-	public static void save( Image image, File file, String formatName ) throws Exception {
+    /**
+     * Saves an image to disk.
+     *
+     * @param image
+     * @param file
+     * @param formatName
+     * @throws Exception
+     */
+    public static void save( Image image, File file, String formatName ) throws Exception {
 
-		FileOutputStream os = new FileOutputStream( file );
-		ImageIO.write( toBufferedImage( image ), formatName, os );
+        FileOutputStream os = new FileOutputStream( file );
+        ImageIO.write( toBufferedImage( image ), formatName, os );
 
-	}
+    }
 
-	/**
-	 * Converts an Image to a BufferedImage.
-	 *
-	 * @param image
-	 * @return
-	 * @throws Exception
-	 */
-	public static BufferedImage toBufferedImage( Image image ) throws Exception {
+    /**
+     * Converts an Image to a BufferedImage.
+     *
+     * @param image
+     * @return
+     * @throws Exception
+     */
+    public static BufferedImage toBufferedImage( Image image ) throws Exception {
 
-		if ( image instanceof BufferedImage ) {
-			return (BufferedImage) image;
-		}
+        if ( image instanceof BufferedImage ) {
+            return (BufferedImage) image;
+        }
 
-		image = new ImageIcon( image ).getImage();
+        image = new ImageIcon( image ).getImage();
 
-		boolean hasAlpha = hasAlpha( image );
+        boolean hasAlpha = hasAlpha( image );
 
-		BufferedImage bimage = null;
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        BufferedImage bimage = null;
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-		int transparency = Transparency.OPAQUE;
+        int transparency = Transparency.OPAQUE;
 
-		if ( hasAlpha ) {
+        if ( hasAlpha ) {
 
-			transparency = Transparency.BITMASK;
+            transparency = Transparency.BITMASK;
 
-		}
+        }
 
-		GraphicsDevice gs = ge.getDefaultScreenDevice();
-		GraphicsConfiguration gc = gs.getDefaultConfiguration();
-		bimage = gc.createCompatibleImage( image.getWidth( null ), image.getHeight( null ),
-				transparency );
+        GraphicsDevice gs = ge.getDefaultScreenDevice();
+        GraphicsConfiguration gc = gs.getDefaultConfiguration();
+        bimage = gc.createCompatibleImage( image.getWidth( null ), image.getHeight( null ), transparency );
 
-		if ( bimage == null ) {
+        if ( bimage == null ) {
 
-			int type = BufferedImage.TYPE_INT_RGB;
+            int type = BufferedImage.TYPE_INT_RGB;
 
-			if ( hasAlpha ) {
+            if ( hasAlpha ) {
 
-				type = BufferedImage.TYPE_INT_ARGB;
+                type = BufferedImage.TYPE_INT_ARGB;
 
-			}
+            }
 
-			bimage = new BufferedImage( image.getWidth( null ), image.getHeight( null ), type );
+            bimage = new BufferedImage( image.getWidth( null ), image.getHeight( null ), type );
 
-		}
+        }
 
-		Graphics g = bimage.createGraphics();
-		g.drawImage( image, 0, 0, null );
-		g.dispose();
+        Graphics g = bimage.createGraphics();
+        g.drawImage( image, 0, 0, null );
+        g.dispose();
 
-		return bimage;
-	}
+        return bimage;
+    }
 
-	/**
-	 * Converts an Image to a byte array. Assuming the Image is a JPG.
-	 *
-	 * @param image
-	 * @return
-	 * @throws Exception
-	 */
-	public static byte[] toByteArray( Image image ) throws Exception {
+    /**
+     * Converts an Image to a byte array. Assuming the Image is a JPG.
+     *
+     * @param image
+     * @return
+     * @throws Exception
+     */
+    public static byte[] toByteArray( Image image ) throws Exception {
 
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write( toBufferedImage( image ), "jpg", bos );
-		return bos.toByteArray();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write( toBufferedImage( image ), "jpg", bos );
+        return bos.toByteArray();
 
-	}
+    }
 
-	/**
-	 * Converts a byte array to an Image. Assuming the Image is a JPG.
-	 *
-	 * @param bytes
-	 * @return
-	 * @throws IOException
-	 */
-	public static Image toImage( byte[] bytes ) throws IOException {
+    /**
+     * Converts a byte array to an Image. Assuming the Image is a JPG.
+     *
+     * @param bytes
+     * @return
+     * @throws IOException
+     */
+    public static Image toImage( byte[] bytes ) throws IOException {
 
-		ByteArrayInputStream bis = new ByteArrayInputStream( bytes );
-		Iterator<?> readers = ImageIO.getImageReadersByFormatName( "jpg" );
-		ImageReader reader = (ImageReader) readers.next();
-		ImageInputStream iis = ImageIO.createImageInputStream( bis );
-		reader.setInput( iis, true );
-		ImageReadParam param = reader.getDefaultReadParam();
+        ByteArrayInputStream bis = new ByteArrayInputStream( bytes );
+        Iterator<?> readers = ImageIO.getImageReadersByFormatName( "jpg" );
+        ImageReader reader = (ImageReader) readers.next();
+        ImageInputStream iis = ImageIO.createImageInputStream( bis );
+        reader.setInput( iis, true );
+        ImageReadParam param = reader.getDefaultReadParam();
 
-		return reader.read( 0, param );
+        return reader.read( 0, param );
 
-	}
+    }
 
 }
