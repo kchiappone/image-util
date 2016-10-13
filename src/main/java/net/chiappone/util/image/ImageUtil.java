@@ -15,33 +15,15 @@ import java.util.Iterator;
 
 /**
  * @author Kurtis Chiappone
- * @date 10/9/2016
  */
 public class ImageUtil {
 
-    /**
-     * Draws an image.
-     *
-     * @param img
-     * @param g
-     * @param observer
-     * @param x
-     * @param y
-     * @throws Exception
-     */
     public static void draw( Image img, Graphics g, ImageObserver observer, int x, int y ) throws Exception {
 
         g.drawImage( toBufferedImage( img ), x, y, observer );
 
     }
 
-    /**
-     * Determines if an image has alpha transparency.
-     *
-     * @param image
-     * @return
-     * @throws InterruptedException
-     */
     public static boolean hasAlpha( Image image ) throws InterruptedException {
 
         if ( image instanceof BufferedImage ) {
@@ -59,14 +41,6 @@ public class ImageUtil {
 
     }
 
-    /**
-     * Saves an image to disk.
-     *
-     * @param image
-     * @param file
-     * @param formatName
-     * @throws Exception
-     */
     public static void save( Image image, File file, String formatName ) throws Exception {
 
         FileOutputStream os = new FileOutputStream( file );
@@ -74,13 +48,6 @@ public class ImageUtil {
 
     }
 
-    /**
-     * Converts an Image to a BufferedImage.
-     *
-     * @param image
-     * @return
-     * @throws Exception
-     */
     public static BufferedImage toBufferedImage( Image image ) throws Exception {
 
         if ( image instanceof BufferedImage ) {
@@ -127,13 +94,6 @@ public class ImageUtil {
         return bimage;
     }
 
-    /**
-     * Converts an Image to a byte array. Assuming the Image is a JPG.
-     *
-     * @param image
-     * @return
-     * @throws Exception
-     */
     public static byte[] toByteArray( Image image ) throws Exception {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -142,13 +102,6 @@ public class ImageUtil {
 
     }
 
-    /**
-     * Converts a byte array to an Image. Assuming the Image is a JPG.
-     *
-     * @param bytes
-     * @return
-     * @throws IOException
-     */
     public static Image toImage( byte[] bytes ) throws IOException {
 
         ByteArrayInputStream bis = new ByteArrayInputStream( bytes );
